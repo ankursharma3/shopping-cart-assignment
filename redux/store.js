@@ -1,6 +1,14 @@
-import {createStore} from "redux";
-import rootReducer from "./reducers/rootReducer"
+import { createStore, applyMiddleware, compose } from "redux";
+import rootReducer from "./reducers/rootReducer";
+//import ReduxThunk from "redux-thunk";
+import createSagaMiddleware from "redux-saga";
+import rootSaga from "./sagas/rootSaga";
 
-const store = createStore(rootReducer)
+const sagaMiddleware = createSagaMiddleware();
 
-export default store
+//const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
+const store = createStore(rootReducer,applyMiddleware(sagaMiddleware));
+
+sagaMiddleware.run(rootSaga);
+
+export default store;
