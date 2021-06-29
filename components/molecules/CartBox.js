@@ -1,6 +1,9 @@
 import styled from 'styled-components'
 import { CartIcon } from '../atom/CartIcon';
 import {SignUp} from '../atom/SignUp';
+import {connect} from 'react-redux';
+import {incrementCounter,setInfo} from '../../redux/actions/main';
+import {useState} from "react";
 
 const CartContainer = styled.div`
     display:flex;
@@ -27,18 +30,25 @@ const CartCount = styled.span`
 `;
 
 
- function CartBox(){
+ function CartBox({userInfo,setInfo,incrementCounter}){
+     console.log("user info",userInfo)
+    const {name,cartCount} = userInfo;
+    
     return (
       <CartContainer>
           <SignUp/>
         <CartBoxStyle>
             <CartIcon/>
-            <CartCount>
-                1 Items
+            <CartCount >
+                <button onClick={(e)=>{ incrementCounter(cartCount)}}>Cart Count</button>
+                {cartCount} Items
             </CartCount>
         </CartBoxStyle>
       </CartContainer>  
     )
 }
 
-export default  CartBox  
+ const mapStateToProps = state=>({ userInfo:state.main })
+ const mapDispatchToProps = {setInfo,incrementCounter} 
+
+ export default  connect(mapStateToProps,mapDispatchToProps)(CartBox)  

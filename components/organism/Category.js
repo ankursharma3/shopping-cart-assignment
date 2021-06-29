@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 import { FetchCategory } from "../../api/FetchCategory";
 import { CategoryBox } from "../molecules/CategoryBox";
-
+import {connect} from 'react-redux';
+import {setInfo} from '../../redux/actions/main';
 const CategoryStyled = styled.div`
     width:100%;
     padding-left:150px;
@@ -15,6 +16,10 @@ const CategoryStyled = styled.div`
 `;
 function Category({categories}){
     let data = categories;
+    
+    if(!data)
+        return ''
+    
     return (<CategoryStyled> 
             {data.map((category) => (
             <CategoryBox key={category.id} data={category} />
@@ -23,10 +28,14 @@ function Category({categories}){
     );
 }
 
+
 Category.getInitialProps = async () => {
     const categories = await FetchCategory();
     return {categories}
 }
 
-  
-export default Category
+const mapStateToProps = (state)=>({ userInfo:state.main })
+const mapDispatchToProps = {setInfo:setInfo} 
+
+export default  connect(mapStateToProps,mapDispatchToProps)(Category)  
+/*export default Category*/
